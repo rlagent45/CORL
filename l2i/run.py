@@ -144,7 +144,7 @@ def run(config):
             embedded_trip = embed_solution_with_attention(problem, solution, config)
             distance = next_distance
         distances.append(min_distance)
-        history.append(time() - start)
+        history.append([np.mean(distances),time() - start])
         steps.append(min_step)
         if validate_solution(problem, best_solution, min_distance):
             solutions.append(best_solution)
@@ -227,7 +227,7 @@ def run(config):
                     save_path = "./{}/{}_{}hr.ckpt".format(config.folder,config.name, hr_time)
                     torch.save(policy_estimator, save_path)
                     with open('./{}/{}_{}hr.pickle'.format(config.folder,config.name,hr_time), 'wb') as handle:
-                        pickle.dump(zip(history,distances), handle, protocol=pickle.HIGHEST_PROTOCOL)
+                        pickle.dump(history, handle, protocol=pickle.HIGHEST_PROTOCOL)
                     print("Model saved in path: %s" % save_path)
 
     if config.test_model is None:

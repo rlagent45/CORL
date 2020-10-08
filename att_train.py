@@ -81,10 +81,9 @@ def train_epoch(model, optimizer, baseline, lr_scheduler, epoch, val_dataset, pr
     model.train()
     set_decode_type(model, "sampling")
 
-    dat = []
     for batch_id, batch in enumerate(tqdm(training_dataloader, disable=opts.no_progress_bar)):
 
-        avg = train_batch(
+        train_batch(
             model,
             optimizer,
             baseline,
@@ -95,7 +94,6 @@ def train_epoch(model, optimizer, baseline, lr_scheduler, epoch, val_dataset, pr
             tb_logger,
             opts
         )
-        dat.append((avg, start_start - time.time()))
 
         step += 1
 
@@ -124,7 +122,7 @@ def train_epoch(model, optimizer, baseline, lr_scheduler, epoch, val_dataset, pr
 
     # lr_scheduler should be called at end of epoch
     lr_scheduler.step()
-    return dat
+    return [avg_reward, time.time() - start_start]
 
 
 def train_batch(
@@ -163,4 +161,3 @@ def train_batch(
     if step % int(opts.log_step) == 0:
         log_values(cost, grad_norms, epoch, batch_id, step,
                    log_likelihood, reinforce_loss, bl_loss, tb_logger, opts)
-    return cost

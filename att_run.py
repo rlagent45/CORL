@@ -24,6 +24,7 @@ def run(opts):
     start_time = time()
     train_run = []
     opts.save_hrs.sort()
+    run_name = opts.run_name
 
     # Pretty print the run args
     pp.pprint(vars(opts))
@@ -174,13 +175,13 @@ def run(opts):
                 opts,
                 start_time
             )
-            train_run += avg_time
+            train_run.append(avg_time)
             for hr in opts.save_hrs:
                 if (time() - start_time) > hr*3600:
                     opts.save_hrs.remove(hr)
                     print('Saving model and state...')
                     hr_time = int(round((time()-start_time)/3600))
-                    with open('../models/att/hist_{}_{}hr.pickle'.format(opts.run_name,hr_time), 'wb') as handle:
+                    with open('../models/att/hist_{}_{}hr.pickle'.format(run_name,hr_time), 'wb') as handle:
                                 pickle.dump(train_run, handle, protocol=pickle.HIGHEST_PROTOCOL)
                     torch.save(
                         {
@@ -190,8 +191,8 @@ def run(opts):
                             'cuda_rng_state': torch.cuda.get_rng_state_all(),
                             'baseline': baseline.state_dict()
                         },
-                        os.path.join('../models/att', '{}_{}hr-model-att-only.pt'.format(opts.run_name,hr_time))
+                        os.path.join('../models/att', '{}_{}hr-model-att-only.pt'.format(run_name,hr_time))
                         )
-                    torch.save(model, os.path.join('../models/att', '{}_{}hr-model.pt'.format(opts.run_name,hr_time)))
+                    torch.save(model, os.path.join('../models/att', '{}_{}hr-model.pt'.format(run_name,hr_time)))
 if __name__ == "__main__":
     run(get_options())

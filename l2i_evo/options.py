@@ -14,20 +14,21 @@ def get_options():
     parser.add_argument('--num_training_points', type=int, default=100, help="size of the problem for training")
     parser.add_argument('--num_test_points', type=int, default=100, help="size of the problem for testing")
     parser.add_argument('--num_episode', type=int, default=40000, help="number of training episode")
-    parser.add_argument('--num_paths_to_ruin', type=int, default=2, help="")
+    parser.add_argument('--num_paths_to_ruin', type=int, default=2, help="max number of paths to break in solution")
     parser.add_argument('--batch_size', type=int, default=1000, help='batch size')
     parser.add_argument('--max_rollout_steps', type=int, default=20000, help="maximum rollout steps")
     parser.add_argument('--max_rollout_seconds', type=int, default=1000, help="maximum rollout time in seconds")
     parser.add_argument('--detect_negative_cycle', type=str2bool, nargs='?', const=True, default=False, help="")
-    parser.add_argument('--epsilon_greedy', type=float, default=0.05, help="")
+    parser.add_argument('--epsilon_greedy', type=float, default=0.05, help="epsilon for RL")
     parser.add_argument('--sample_actions_in_rollout', type=str2bool, nargs='?', const=True, default=True, help="")
-    parser.add_argument('--max_no_improvement', type=int, default=6, help="")
+    parser.add_argument('--max_no_improvement', type=int, default=6,
+            help="number of iterations allowed without improvement before perturbation")
     parser.add_argument('--num_actions', type=int, default=27, help="dimension of action space")
     
     parser.add_argument('--problem_seed', type=int, default=1, help="problem generating seed")
     
-    parser.add_argument('--input_embedded_trip_dim', type=int, default=11, help="")
-    parser.add_argument('--num_embedded_dim', type=int, default=64, help="")
+    parser.add_argument('--input_embedded_trip_dim', type=int, default=11, help="embedding dimension for input")
+    parser.add_argument('--num_embedded_dim', type=int, default=64, help="embedding dimension for policy")
     parser.add_argument('--discount_factor', type=float, default=1.0, help="discount factor of policy network")
     parser.add_argument('--alpha', type=float, default=0.001, help="learning rate of evo method")
     parser.add_argument('--sigma', type=float, default=0.01, help="exploration area of evo method")
@@ -35,8 +36,8 @@ def get_options():
     
     parser.add_argument('--num_history_action_use', type=int, default=0, help="number of history actions used in the representation of current state")
 
-    parser.add_argument('--training_model', type=str, default=None, help="")
-    parser.add_argument('--test_model', type=str, default=None, help="")
+    parser.add_argument('--training_model', type=str, default=None, help="path to model to be trained")
+    parser.add_argument('--test_model', type=str, default=None, help="path to model to be tested")
     parser.add_argument('--initial_solutions', type=str, default=None, help="path to pickled array of initial solutions")
     parser.add_argument('--max_num_training_epsisodes', type=int, default=10000000, help="")
     
